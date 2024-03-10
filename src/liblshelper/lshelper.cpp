@@ -245,26 +245,31 @@ LSHelper::isManagedWindow(EffectWindow *w)
 
     //qCWarning(LSHELPER) << w->windowRole() << w->windowType() << w->windowClass();
     if (
-            (!w->hasDecoration()
-                && (
-                    w->windowClass().contains("plasma", Qt::CaseInsensitive)
-                    || w->windowClass().contains("krunner", Qt::CaseInsensitive)
-                    || w->windowClass().contains("sddm", Qt::CaseInsensitive)
-                    || w->windowClass().contains("vmware-user", Qt::CaseInsensitive)
-                    || w->windowClass().contains("latte-dock", Qt::CaseInsensitive)
-                    || w->windowClass().contains("lattedock", Qt::CaseInsensitive)
-                    || w->windowClass().contains("plank", Qt::CaseInsensitive)
-                    || w->windowClass().contains("cairo-dock", Qt::CaseInsensitive)
-                    || w->windowClass().contains("albert", Qt::CaseInsensitive)
-                    || w->windowClass().contains("ulauncher", Qt::CaseInsensitive)
-                    || w->windowClass().contains("ksplash", Qt::CaseInsensitive)
-                    || w->windowClass().contains("ksmserver", Qt::CaseInsensitive)
-                    || (w->windowClass().contains("reaper", Qt::CaseInsensitive) && !hasShadow(w))
-                )
-            )
-            || w->windowClass().contains("xwaylandvideobridge", Qt::CaseInsensitive)
+        (!w->hasDecoration()
+            && (w->windowClass().contains("plasma", Qt::CaseInsensitive)
+                || w->windowClass().contains("krunner", Qt::CaseInsensitive)
+                || w->windowClass().contains("sddm", Qt::CaseInsensitive)
+                || w->windowClass().contains("vmware-user", Qt::CaseInsensitive)
+                || w->windowClass().contains("latte-dock", Qt::CaseInsensitive)
+                || w->windowClass().contains("lattedock", Qt::CaseInsensitive)
+                || w->windowClass().contains("plank", Qt::CaseInsensitive)
+                || w->windowClass().contains("cairo-dock", Qt::CaseInsensitive)
+                || w->windowClass().contains("albert", Qt::CaseInsensitive)
+                || w->windowClass().contains("ulauncher", Qt::CaseInsensitive)
+                || w->windowClass().contains("ksplash", Qt::CaseInsensitive)
+                || w->windowClass().contains("ksmserver", Qt::CaseInsensitive)
+                || (w->windowClass().contains("reaper", Qt::CaseInsensitive) && !hasShadow(w))
+                || w->windowClass().contains("waydroid", Qt::CaseInsensitive)
+                || w->windowClass().contains("org.jackhuang.hmcl.launcher", Qt::CaseInsensitive) // HMCL
+                || w->windowClass().contains("audaciouslyricsqml", Qt::CaseInsensitive) // AudaciousLyricsQML
+                || w->windowClass().contains("todesk", Qt::CaseInsensitive) // ToDesk
+                || w->windowClass().contains("wemeetapp", Qt::CaseInsensitive) // 腾讯会议
+                || w->windowClass().contains("touchegg", Qt::CaseInsensitive) // Touchegg
+                ))
+        || w->windowClass().contains("xwaylandvideobridge", Qt::CaseInsensitive)
 
-        ) return false;
+    )
+        return false;
 
     if(w->windowClass().contains("jetbrains", Qt::CaseInsensitive) && w->caption().contains(QRegularExpression ("win[0-9]+")))
         return false;
