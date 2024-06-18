@@ -38,8 +38,9 @@ public:
 
     static bool supported();
     static bool enabledByDefault();
-    
+
     void setRoundness(const int r, Output *s);
+
     void reconfigure(ReconfigureFlags flags) override;
     void paintScreen(const RenderTarget &renderTarget, const RenderViewport &viewport, int mask, const QRegion &region, Output *s) override;
     void prePaintWindow(EffectWindow* w, WindowPrePaintData& data, std::chrono::milliseconds time) override;
@@ -63,6 +64,7 @@ private:
 
     struct LSScreenStruct
     {
+        bool configured=false;
         qreal scale=1.0;
         float sizeScaled;
     };
@@ -87,4 +89,3 @@ private:
 } // namespace KWin
 
 #endif //LIGHTLYSHADERS_H
-

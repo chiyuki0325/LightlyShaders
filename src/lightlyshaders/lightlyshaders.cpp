@@ -45,9 +45,9 @@ static void ensureResources()
 
 namespace KWin {
 
-KWIN_EFFECT_FACTORY_SUPPORTED_ENABLED(  LightlyShadersEffect, 
-                                        "lightlyshaders.json", 
-                                        return LightlyShadersEffect::supported();, 
+KWIN_EFFECT_FACTORY_SUPPORTED_ENABLED(  LightlyShadersEffect,
+                                        "lightlyshaders.json",
+                                        return LightlyShadersEffect::supported();,
                                         return LightlyShadersEffect::enabledByDefault();)
 
 LightlyShadersEffect::LightlyShadersEffect() : OffscreenEffect()
@@ -110,12 +110,12 @@ LightlyShadersEffect::windowAdded(EffectWindow *w)
     QRectF maximized_area = effects->clientArea(MaximizeArea, w);
     if (maximized_area == w->frameGeometry() && m_disabledForMaximized)
         m_windows[w].skipEffect = true;
-    
+
     redirect(w);
     setShader(w, m_shader.get());
 }
 
-void 
+void
 LightlyShadersEffect::windowFullScreenChanged(EffectWindow *w)
 {
     if(w->isFullScreen()) {
@@ -125,8 +125,8 @@ LightlyShadersEffect::windowFullScreenChanged(EffectWindow *w)
     }
 }
 
-void 
-LightlyShadersEffect::windowMaximizedStateChanged(EffectWindow *w, bool horizontal, bool vertical) 
+void
+LightlyShadersEffect::windowMaximizedStateChanged(EffectWindow *w, bool horizontal, bool vertical)
 {
     if (!m_disabledForMaximized) return;
 
@@ -198,6 +198,11 @@ LightlyShadersEffect::paintScreen(const RenderTarget &renderTarget, const Render
 {
     bool set_roundness = false;
 
+    if (!m_screens[s].configured) {
+        m_screens[s].configured = true;
+        set_roundness = true;
+    }
+
     qreal scale = viewport.scale();
 
     if(scale != m_screens[s].scale) {
@@ -208,7 +213,7 @@ LightlyShadersEffect::paintScreen(const RenderTarget &renderTarget, const Render
     if(set_roundness) {
         setRoundness(m_roundness, s);
         m_helper->reconfigure();
-    } 
+    }
 
     effects->paintScreen(renderTarget, viewport, mask, region, s);
 }
@@ -225,7 +230,7 @@ LightlyShadersEffect::prePaintWindow(EffectWindow *w, WindowPrePaintData &data, 
     Output *s = w->screen();
     if (effects->waylandDisplay() == nullptr) {
         s = nullptr;
-    } 
+    }
 
     const QRectF geo(w->frameGeometry());
     for (int corner = 0; corner < LSHelper::NTex; ++corner)
@@ -239,7 +244,7 @@ LightlyShadersEffect::prePaintWindow(EffectWindow *w, WindowPrePaintData &data, 
                 reg.translate(geo.x() + geo.width() - m_size, geo.y()-m_shadowOffset);
                 break;
             case LSHelper::BottomRight:
-                reg.translate(geo.x() + geo.width() - m_size-1, geo.y()+geo.height()-m_size-1); 
+                reg.translate(geo.x() + geo.width() - m_size-1, geo.y()+geo.height()-m_size-1);
                 break;
             case LSHelper::BottomLeft:
                 reg.translate(geo.x()-m_shadowOffset+1, geo.y()+geo.height()-m_size-1);
@@ -247,7 +252,7 @@ LightlyShadersEffect::prePaintWindow(EffectWindow *w, WindowPrePaintData &data, 
             default:
                 break;
         }
-        
+
         data.opaque -= reg;
     }
 
@@ -323,7 +328,7 @@ LightlyShadersEffect::drawWindow(const RenderTarget &renderTarget, const RenderV
     m_shader->setUniform(isSquircleLocation, (m_cornersType == LSHelper::SquircledCorners));
 
     glActiveTexture(GL_TEXTURE0);
-    
+
     OffscreenEffect::drawWindow(renderTarget, viewport, w, mask, region, data);
 
     sm->popShader();

@@ -23,6 +23,8 @@ uniform float saturation;
 
 varying vec2 texcoord0;
 
+#include "colormanagement.glsl"
+
 //Used code from https://github.com/yilozt/rounded-window-corners project
 float squircleBounds(vec2 p, vec2 center, float clip_radius)
 {
@@ -435,6 +437,7 @@ void main()
         }
     }
 
+    outColor = sourceEncodingToNitsInDestinationColorspace(outColor);
 
     //Support opacity
     if (saturation != 1.0) {
@@ -445,6 +448,6 @@ void main()
     outColor *= modulation;
 
     //Output result
-    gl_FragColor = outColor;
+    gl_FragColor = nitsToDestinationEncoding(outColor);
     //gl_FragColor = vec4(tex.r, tex.g, 1.0, tex.a);
 }
